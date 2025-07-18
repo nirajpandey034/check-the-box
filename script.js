@@ -19,36 +19,11 @@ const allShapes = ['square', 'circle', 'star'];
 const allColors = ['red', 'yellow', 'purple', 'blue', 'green'];
 
 const levels = [
-  {
-    name: 'Level 1',
-    difficulty: 1500,
-    targetCount: 1,
-    distractorCount: 1,
-  },
-  {
-    name: 'Level 2',
-    difficulty: 1200,
-    targetCount: 2,
-    distractorCount: 2,
-  },
-  {
-    name: 'Level 3',
-    difficulty: 1000,
-    targetCount: 2,
-    distractorCount: 3,
-  },
-  {
-    name: 'Level 4',
-    difficulty: 800,
-    targetCount: 2,
-    distractorCount: 4,
-  },
-  {
-    name: 'Level 5',
-    difficulty: 600,
-    targetCount: 3,
-    distractorCount: 4,
-  },
+  { name: 'Level 1', difficulty: 1000, targetCount: 1, distractorCount: 1 },
+  { name: 'Level 2', difficulty: 800, targetCount: 2, distractorCount: 2 },
+  { name: 'Level 3', difficulty: 700, targetCount: 2, distractorCount: 3 },
+  { name: 'Level 4', difficulty: 600, targetCount: 2, distractorCount: 4 },
+  { name: 'Level 5', difficulty: 500, targetCount: 3, distractorCount: 4 },
 ];
 
 function getRandomItems(arr, count) {
@@ -89,7 +64,7 @@ function createShape(type) {
 }
 
 function startCountdown(callback) {
-  let timeLeft = 3;
+  let timeLeft = 2; // reduced from 3 to 2 seconds
   countdownText.textContent = `Starting in ${timeLeft}...`;
   const interval = setInterval(() => {
     timeLeft--;
@@ -152,7 +127,7 @@ function nextRound() {
       return;
     }
   }
-  setTimeout(showShapes, levels[currentLevelIndex].difficulty);
+  setTimeout(showShapes, 300); // reduced wait between rounds
 }
 
 function setupLevel() {
