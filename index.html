@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- 🔍 SEO Meta Tags -->
+    <title>Catch the Box Game</title>
+    <meta
+      name="description"
+      content="Catch the Box - A fun, fast-paced reaction game. Test your reflexes across difficulty levels and compete for the fastest time!"
+    />
+    <meta
+      name="keywords"
+      content="reaction game, javascript game, reflex game, catch the box, click game, html5 game, mobile-friendly game"
+    />
+    <meta name="author" content="Niraj Kumar Pandey" />
+
+    <!-- 📱 Mobile Experience -->
+    <meta name="theme-color" content="#3498db" />
+    <meta name="mobile-web-app-capable" content="yes" />
+
+    <!-- 🧠 Social Sharing -->
+    <meta property="og:title" content="Catch the Box Game" />
+    <meta
+      property="og:description"
+      content="Test your reflexes in this fun, fast-paced reaction game. Try to beat the leaderboard!"
+    />
+    <meta property="og:type" content="website" />
+    <meta
+      property="og:url"
+      content="https://github.com/nirajpandey034/check-the-box/"
+    />
+
+    <!-- 🐦 Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Catch the Box Game" />
+    <meta
+      name="twitter:description"
+      content="Fun and challenging reflex game. Play now and top the leaderboard!"
+    />
+
+    <!-- 🔗 Favicon -->
+    <link rel="icon" href="favicon.ico" type="image/x-icon" />
+
+    <!-- 🎨 CSS -->
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <h1>🎯 Catch the Box</h1>
+    <p id="instructions">
+      Click the box as quickly as you can! 10 rounds total.
+    </p>
+
+    <!-- Difficulty selector -->
+    <label for="difficulty">Choose difficulty:</label>
+    <select id="difficulty">
+      <option value="easy">Easy</option>
+      <option value="medium" selected>Medium</option>
+      <option value="hard">Hard</option>
+    </select>
+
+    <!-- Game area -->
+    <div id="gameArea">
+      <div id="box"></div>
+    </div>
+
+    <!-- Countdown and Score -->
+    <p id="countdown"></p>
+    <p id="score">Click the game area to Start</p>
+    <button id="restartBtn" style="display: none">🔁 Start Again</button>
+
+    <!-- Leaderboard -->
+    <div id="leaderboard">
+      <h2>🏆 Leaderboard (Top 5)</h2>
+      <ol id="leaderboardList"></ol>
+    </div>
+
+    <!-- Audio -->
+    <audio
+      id="clickSound"
+      src="https://www.soundjay.com/button/beep-07.wav"
+      preload="auto"
+    ></audio>
+    <audio
+      id="startSound"
+      src="https://www.soundjay.com/button/button-3.mp3"
+      preload="auto"
+    ></audio>
+
+    <!-- Scripts -->
+    <script src="script.js"></script>
+  </body>
+</html>
