@@ -3,80 +3,53 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Catch the Box - Reflex Game</title>
 
-    <!-- 🔍 SEO Meta Tags -->
-    <title>Catch the Box Game</title>
+    <!-- SEO Meta Tags -->
     <meta
       name="description"
-      content="Catch the Box - A fun, fast-paced reaction game. Test your reflexes across difficulty levels and compete for the fastest time!"
+      content="Catch the Box - A fast-paced reflex game with increasing difficulty and visual confusion."
     />
     <meta
       name="keywords"
-      content="reaction game, javascript game, reflex game, catch the box, click game, html5 game, mobile-friendly game"
+      content="reflex game, reaction game, color game, shape game, HTML5 game, mobile game"
     />
     <meta name="author" content="Niraj Kumar Pandey" />
-
-    <!-- 📱 Mobile Experience -->
     <meta name="theme-color" content="#3498db" />
     <meta name="mobile-web-app-capable" content="yes" />
-
-    <!-- 🧠 Social Sharing -->
     <meta property="og:title" content="Catch the Box Game" />
     <meta
       property="og:description"
-      content="Test your reflexes in this fun, fast-paced reaction game. Try to beat the leaderboard!"
+      content="Reflex challenge game. Identify the right shape and color. Climb the leaderboard!"
     />
     <meta property="og:type" content="website" />
-    <meta
-      property="og:url"
-      content="https://github.com/nirajpandey034/check-the-box/"
-    />
-
-    <!-- 🐦 Twitter Card -->
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="Catch the Box Game" />
-    <meta
-      name="twitter:description"
-      content="Fun and challenging reflex game. Play now and top the leaderboard!"
-    />
 
-    <!-- 🔗 Favicon -->
+    <!-- Favicon -->
     <link rel="icon" href="favicon.ico" type="image/x-icon" />
 
-    <!-- 🎨 CSS -->
+    <!-- Styles -->
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
     <h1>🎯 Catch the Box</h1>
     <p id="instructions">
-      Click the box as quickly as you can! 10 rounds total.
+      Identify and click the correct shape/color combination.
     </p>
 
-    <!-- Difficulty selector -->
-    <label for="difficulty">Choose difficulty:</label>
-    <select id="difficulty">
-      <option value="easy">Easy</option>
-      <option value="medium" selected>Medium</option>
-      <option value="hard">Hard</option>
-    </select>
+    <div id="levelInfo"></div>
 
-    <!-- Game area -->
-    <div id="gameArea">
-      <div id="box"></div>
-    </div>
+    <div id="gameArea"></div>
 
-    <!-- Countdown and Score -->
     <p id="countdown"></p>
-    <p id="score">Click the game area to Start</p>
+    <p id="score">Click to begin the game</p>
     <button id="restartBtn" style="display: none">🔁 Start Again</button>
 
-    <!-- Leaderboard -->
     <div id="leaderboard">
       <h2>🏆 Leaderboard (Top 5)</h2>
       <ol id="leaderboardList"></ol>
     </div>
 
-    <!-- Audio -->
     <audio
       id="clickSound"
       src="https://www.soundjay.com/button/beep-07.wav"
@@ -88,7 +61,6 @@
       preload="auto"
     ></audio>
 
-    <!-- Scripts -->
     <script src="script.js"></script>
   </body>
 </html>

@@ -1,9 +1,9 @@
 body {
-  font-family: Arial, sans-serif;
+  font-family: 'Segoe UI', sans-serif;
+  background-color: #f4f4f4;
   text-align: center;
-  margin-top: 20px;
-  background: #f4f4f4;
-  padding: 10px;
+  margin: 0;
+  padding: 20px;
 }
 
 #gameArea {
@@ -15,38 +15,69 @@ body {
   background-color: #ddd;
   margin: 20px auto;
   border-radius: 10px;
+  box-shadow: 0 0 10px #aaa;
   overflow: hidden;
-  box-shadow: 0 0 10px #999;
-  touch-action: manipulation;
 }
 
-#box {
-  width: 12vw;
-  height: 12vw;
-  max-width: 60px;
-  max-height: 60px;
-  background-color: red;
+.shape {
+  width: 50px;
+  height: 50px;
   position: absolute;
-  display: none;
-  border-radius: 5px;
   cursor: pointer;
 }
 
+.square {
+  border-radius: 8px;
+}
+.circle {
+  border-radius: 50%;
+}
+.star {
+  clip-path: polygon(
+    50% 0%,
+    61% 35%,
+    98% 35%,
+    68% 57%,
+    79% 91%,
+    50% 70%,
+    21% 91%,
+    32% 57%,
+    2% 35%,
+    39% 35%
+  );
+}
+
+.red {
+  background-color: red;
+}
+.yellow {
+  background-color: yellow;
+}
+.purple {
+  background-color: purple;
+}
+.blue {
+  background-color: blue;
+}
+.green {
+  background-color: green;
+}
+
 #countdown,
-#score {
+#score,
+#levelInfo {
   font-size: 1.2rem;
+  margin: 10px;
 }
 
 #restartBtn {
-  margin-top: 10px;
   padding: 10px 20px;
   font-size: 1rem;
   background-color: #3498db;
   color: white;
   border: none;
-  border-radius: 6px;
+  border-radius: 8px;
   cursor: pointer;
-  display: inline-block;
 }
 
 #restartBtn:hover {
@@ -55,19 +86,15 @@ body {
 
 #leaderboard {
   margin-top: 20px;
+  background-color: #fff;
+  padding: 15px;
   max-width: 600px;
   margin-inline: auto;
-  background: #fff;
-  padding: 10px;
-  border-radius: 8px;
-  box-shadow: 0 0 5px #aaa;
+  border-radius: 10px;
+  box-shadow: 0 0 8px #aaa;
+  text-align: left;
 }
 
 #leaderboard h2 {
   margin-top: 0;
-}
-
-#leaderboard ol {
-  padding-left: 20px;
-  text-align: left;
 }

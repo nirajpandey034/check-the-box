@@ -1,64 +1,91 @@
-const box = document.getElementById('box');
+// script.js
+const gameArea = document.getElementById('gameArea');
 const scoreText = document.getElementById('score');
 const countdownText = document.getElementById('countdown');
 const clickSound = document.getElementById('clickSound');
 const startSound = document.getElementById('startSound');
-const difficultySelect = document.getElementById('difficulty');
 const restartBtn = document.getElementById('restartBtn');
+const levelInfo = document.getElementById('levelInfo');
 
 let round = 0;
 let totalTime = 0;
 let appearTime = 0;
 let isPlaying = false;
+let currentLevelIndex = 0;
+let currentTargets = [];
+let roundTargets = [];
 
-function getRandomPosition() {
-  const area = document.getElementById('gameArea');
-  const x = Math.random() * (area.clientWidth - box.clientWidth);
-  const y = Math.random() * (area.clientHeight - box.clientHeight);
-  return { x, y };
-}
+const allShapes = ['square', 'circle', 'star'];
+const allColors = ['red', 'yellow', 'purple', 'blue', 'green'];
 
-function getDelay() {
-  const difficulty = difficultySelect.value;
-  switch (difficulty) {
-    case 'easy':
-      return Math.random() * 2000 + 1000;
-    case 'medium':
-      return Math.random() * 1500 + 700;
-    case 'hard':
-      return Math.random() * 1000 + 300;
-    default:
-      return 1500;
+const levels = [
+  {
+    name: 'Level 1',
+    difficulty: 1500,
+    targetCount: 1,
+    distractorCount: 1,
+  },
+  {
+    name: 'Level 2',
+    difficulty: 1200,
+    targetCount: 2,
+    distractorCount: 2,
+  },
+  {
+    name: 'Level 3',
+    difficulty: 1000,
+    targetCount: 2,
+    distractorCount: 3,
+  },
+  {
+    name: 'Level 4',
+    difficulty: 800,
+    targetCount: 2,
+    distractorCount: 4,
+  },
+  {
+    name: 'Level 5',
+    difficulty: 600,
+    targetCount: 3,
+    distractorCount: 4,
+  },
+];
+
+function getRandomItems(arr, count) {
+  const copy = [...arr];
+  const result = [];
+  while (result.length < count && copy.length > 0) {
+    const index = Math.floor(Math.random() * copy.length);
+    result.push(copy.splice(index, 1)[0]);
   }
+  return result;
 }
 
-function showBox() {
-  const { x, y } = getRandomPosition();
-  box.style.left = `${x}px`;
-  box.style.top = `${y}px`;
-  box.style.display = 'block';
-  appearTime = Date.now();
-}
-
-function hideBox() {
-  box.style.display = 'none';
-}
-
-function startRound() {
-  if (round >= 10) {
-    isPlaying = false;
-    const avgTime = totalTime / 5;
-    scoreText.textContent = `🎉 Game Over! Avg. reaction time: ${avgTime.toFixed(
-      2
-    )} ms`;
-    updateLeaderboard(avgTime);
-    restartBtn.style.display = 'inline-block';
-    return;
+function generateRoundTargets(level) {
+  const combinations = [];
+  for (let shape of allShapes) {
+    for (let color of allColors) {
+      combinations.push(`${color}-${shape}`);
+    }
   }
+  const targets = getRandomItems(combinations, level.targetCount);
+  const distractors = getRandomItems(
+    combinations.filter((item) => !targets.includes(item)),
+    level.distractorCount
+  );
+  return { targets, distractors };
+}
 
-  setTimeout(() => {
-    showBox();
-  }, getDelay());
+function createShape(type) {
+  const [color, shape] = type.split('-');
+  const el = document.createElement('div');
+  el.classList.add('shape', shape, color);
+  el.dataset.type = type;
+  const x = Math.random() * (gameArea.clientWidth - 50);
+  const y = Math.random() * (gameArea.clientHeight - 50);
+  el.style.left = `${x}px`;
+  el.style.top = `${y}px`;
+  return el;
 }
 
 function startCountdown(callback) {
@@ -77,63 +104,113 @@ function startCountdown(callback) {
   }, 1000);
 }
 
-function resetGame() {
+function showShapes() {
+  gameArea.innerHTML = '';
+  const level = levels[currentLevelIndex];
+  const { targets, distractors } = generateRoundTargets(level);
+  roundTargets = targets;
+
+  const all = [...targets, ...distractors];
+  for (let type of all) {
+    const el = createShape(type);
+    gameArea.appendChild(el);
+  }
+
+  levelInfo.textContent = `🎯 ${level.name} — Click only: ${roundTargets.join(
+    ', '
+  )}`;
+  appearTime = Date.now();
+}
+
+function handleClick(e) {
+  if (!isPlaying) return;
+  const el = e.target;
+  if (!el.classList.contains('shape')) return;
+
+  const type = el.dataset.type;
+
+  if (roundTargets.includes(type)) {
+    const reactionTime = Date.now() - appearTime;
+    clickSound.play();
+    totalTime += reactionTime;
+    round++;
+    scoreText.textContent = `✅ Round ${round} | ${reactionTime} ms`;
+    nextRound();
+  } else {
+    scoreText.textContent = `❌ Wrong shape! Game Over`;
+    isPlaying = false;
+    restartBtn.style.display = 'inline-block';
+  }
+}
+
+function nextRound() {
+  if (round >= 5) {
+    currentLevelIndex++;
+    round = 0;
+    if (currentLevelIndex >= levels.length) {
+      endGame();
+      return;
+    }
+  }
+  setTimeout(showShapes, levels[currentLevelIndex].difficulty);
+}
+
+function setupLevel() {
+  scoreText.textContent = `Round 1`;
+  showShapes();
+}
+
+function startGame() {
+  if (isPlaying) return;
+  isPlaying = true;
   round = 0;
   totalTime = 0;
-  isPlaying = true;
-  scoreText.textContent = `Get Ready...`;
+  currentLevelIndex = 0;
   restartBtn.style.display = 'none';
-  startCountdown(() => {
-    scoreText.textContent = `Round: 0`;
-    startRound();
-  });
+  scoreText.textContent = 'Get Ready...';
+  gameArea.innerHTML = '';
+  startCountdown(() => setupLevel());
 }
 
-box.addEventListener('click', () => {
-  if (!isPlaying) return;
-
-  const reactionTime = Date.now() - appearTime;
-  clickSound.play();
-  totalTime += reactionTime;
-  round++;
-  hideBox();
-  scoreText.textContent = `Round: ${round} | Reaction time: ${reactionTime} ms`;
-  startRound();
-});
-
-document
-  .getElementById('gameArea')
-  .addEventListener('click', function startGameOnce() {
-    if (isPlaying) return;
-
-    resetGame();
-
-    // Disable repeated starts mid-game
-    this.removeEventListener('click', startGameOnce);
-  });
-
-restartBtn.addEventListener('click', resetGame);
-
-function updateLeaderboard(avgTime) {
-  let leaderboard = JSON.parse(localStorage.getItem('leaderboard')) || [];
-  leaderboard.push(avgTime);
-  leaderboard.sort((a, b) => a - b);
-  leaderboard = leaderboard.slice(0, 5);
-  localStorage.setItem('leaderboard', JSON.stringify(leaderboard));
-  displayLeaderboard();
+function endGame() {
+  isPlaying = false;
+  const avg = totalTime / (levels.length * 5);
+  scoreText.textContent = `🎉 Game Over! Avg Time: ${avg.toFixed(2)} ms`;
+  updateLeaderboard(avg);
+  restartBtn.style.display = 'inline-block';
 }
 
-function displayLeaderboard() {
+function updateLeaderboard(score) {
+  try {
+    let scores = JSON.parse(localStorage.getItem('leaderboard')) || [];
+    if (typeof score !== 'number' || isNaN(score)) return;
+    scores.push(score);
+    scores.sort((a, b) => a - b);
+    scores = scores.slice(0, 5);
+    localStorage.setItem('leaderboard', JSON.stringify(scores));
+    renderLeaderboard();
+  } catch (e) {
+    console.error('Leaderboard update failed', e);
+  }
+}
+
+function renderLeaderboard() {
   const list = document.getElementById('leaderboardList');
   list.innerHTML = '';
-  const leaderboard = JSON.parse(localStorage.getItem('leaderboard')) || [];
-  leaderboard.forEach((time, index) => {
+  const scores = JSON.parse(localStorage.getItem('leaderboard')) || [];
+  scores.forEach((s, i) => {
     const li = document.createElement('li');
-    li.textContent = `#${index + 1}: ${time.toFixed(2)} ms`;
+    li.textContent = `#${i + 1}: ${s.toFixed(2)} ms`;
     list.appendChild(li);
   });
 }
 
-window.onload = () => {
-  displayLeaderboard();
-};
+restartBtn.addEventListener('click', startGame);
+gameArea.addEventListener('click', handleClick);
+window.onload = renderLeaderboard;
+
+gameArea.addEventListener('click', function initStart(e) {
+  if (isPlaying || e.target.classList.contains('shape')) return;
+  gameArea.removeEventListener('click', initStart);
+  startGame();
+});
